@@ -1,4 +1,5 @@
 from evaluator import evaluate_answer
+from evaluator.concepts import concept_coverage, extract_concepts
 from evaluator.preprocessing import clean_text
 from evaluator.semantic import semantic_similarity
 
@@ -61,3 +62,22 @@ def test_evaluate_answer_returns_all_keys():
 def test_evaluate_answer_does_not_crash_on_empty_answer():
     result = evaluate_answer("Explain deadlock.", REF, "")
     assert EXPECTED_KEYS.issubset(result.keys())
+
+
+# --- concept coverage ---
+
+def test_extract_concepts_splits_the_list():
+    concepts = extract_concepts(REF)
+    assert len(concepts) == 5
+    assert "no preemption" in concepts
+
+
+def test_full_answer_covers_everything():
+    assert concept_coverage(REF, REF)["coverage"] == 1.0
+
+
+def test_irrelevant_answer_covers_nothing():
+    result = concept_coverage(
+        REF, "Photosynthesis is how plants convert sunlight into chemical energy."
+    )
+    assert result["covered"] == 0
