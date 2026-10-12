@@ -104,3 +104,40 @@ def test_llm_judge_scores_are_in_range():
     )
     for key in ("correctness", "relevance", "completeness"):
         assert 0 <= result[key] <= 10   
+
+from evaluator.scoring import aggregate, WEIGHTS
+
+
+# --- score aggregation ---
+
+def test_weights_add_up_to_one():
+    assert abs(sum(WEIGHTS.values()) - 1.0) < 1e-9
+
+
+def test_perfect_scores_give_ten():
+    assert aggregate(10, 10, 10, 1.0, 1.0) == 10.0
+
+
+def test_zero_scores_give_zero():
+    assert aggregate(0, 0, 0, 0.0, 0.0) == 0.0
+
+
+def test_stub_example_matches_hand_calculation():
+    assert aggregate(8, 9, 6, 0.86, 0.75) == 7.81
+
+
+from evaluator.llm_judge import _clean_score
+
+
+# --- LLM score cleaning ---
+
+def test_clean_score_clamps_high_values():
+    assert _clean_score(11) == 10.0
+
+
+def test_clean_score_clamps_negative_values():
+    assert _clean_score(-3) == 0.0
+
+
+def test_clean_score_accepts_numbers_as_text():
+    assert _clean_score("8") == 8.0
