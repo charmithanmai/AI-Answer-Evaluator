@@ -81,3 +81,26 @@ def test_irrelevant_answer_covers_nothing():
         REF, "Photosynthesis is how plants convert sunlight into chemical energy."
     )
     assert result["covered"] == 0
+
+from evaluator.llm_judge import llm_rubric_evaluate
+
+
+# --- LLM judge ---
+
+def test_llm_judge_returns_expected_keys():
+    result = llm_rubric_evaluate(
+        "Explain deadlock in operating systems.",
+        REF,
+        "Deadlock occurs when processes wait for each other's resources.",
+    )
+    assert {"correctness", "relevance", "completeness", "feedback"}.issubset(result.keys())
+
+
+def test_llm_judge_scores_are_in_range():
+    result = llm_rubric_evaluate(
+        "Explain deadlock in operating systems.",
+        REF,
+        "Deadlock occurs when processes wait for each other's resources.",
+    )
+    for key in ("correctness", "relevance", "completeness"):
+        assert 0 <= result[key] <= 10   
