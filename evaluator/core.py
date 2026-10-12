@@ -33,5 +33,5 @@ def evaluate_answer(question: str, reference_answer: str, ai_answer: str) -> dic
         "concepts_total": cov["total"],
         "missing_concepts": cov["missing"],
         "overall_score": overall,
-        "feedback": build_feedback(rubric["feedback"], cov["missing"]),
+        "feedback": build_feedback(rubric["feedback"], cov["missing"],overall),
     }

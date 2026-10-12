@@ -141,3 +141,29 @@ def test_clean_score_clamps_negative_values():
 
 def test_clean_score_accepts_numbers_as_text():
     assert _clean_score("8") == 8.0
+
+from evaluator.feedback import build_feedback
+
+
+# --- feedback ---
+
+def test_feedback_lists_missing_concepts():
+    text = build_feedback("Good start.", ["no preemption", "circular wait"], 7.5)
+    assert "no preemption" in text and "circular wait" in text
+
+
+def test_feedback_includes_band_and_score():
+    text = build_feedback("Nice.", [], 9.0)
+    assert "Excellent" in text and "9.0/10" in text
+
+
+def test_feedback_handles_llm_failure():
+    text = build_feedback("LLM evaluation failed after 3 attempts: 503", ["circular wait"], 1.1)
+    assert "unavailable" in text
+    assert "Weak" not in text
+    assert "circular wait" in text
+
+
+def test_feedback_handles_empty_inputs():
+    assert build_feedback("", [], None) == ""
+    assert build_feedback(None, None) == ""

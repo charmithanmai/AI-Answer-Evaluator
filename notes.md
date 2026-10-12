@@ -84,3 +84,11 @@ multi-criteria approach adds real signal beyond a single method.
   mid-project; switched to gemini-3.8-flash. Model name is kept as a
   single constant (MODEL_NAME) in llm_judge.py so future renames are a
   one-line change.
+
+  
+## Feedback design (Day 7)
+Feedback combines three parts: a quality band (Excellent 8.5+, Good 7+,
+Partial 5+, Weak below 5), the LLM judge's sentence, and the list of
+missing concepts from concept coverage. If the LLM call fails, the band is
+left out, because the fallback scores of 0 are not real judgments, and the
+text says the judge was unavailable.
