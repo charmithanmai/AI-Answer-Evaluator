@@ -1,0 +1,1 @@
+console.log("AI Answer Evaluator frontend loaded");
