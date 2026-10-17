@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 from pydantic import BaseModel, field_validator
 
 
@@ -23,3 +25,7 @@ class EvaluationResponse(BaseModel):
     concept_coverage: float
     overall_score: float
     feedback: str
+    # Extra details from Member 1's evaluator
+    concepts_covered: Optional[int] = None
+    concepts_total: Optional[int] = None
+    missing_concepts: List[str] = []

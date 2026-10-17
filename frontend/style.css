@@ -182,3 +182,25 @@ button:disabled {
   background: #8a97ad;
   cursor: not-allowed;
 }
+/* ---------- Concepts ---------- */
+
+.concepts {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f4f6fa;
+  border-radius: 6px;
+}
+
+.concepts h3 {
+  margin: 0 0 8px 0;
+}
+
+.concepts p {
+  margin: 0 0 8px 0;
+}
+
+.concepts ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #c0392b;
+}

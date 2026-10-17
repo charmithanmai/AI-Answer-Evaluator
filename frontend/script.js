@@ -13,7 +13,20 @@ function showResults(result) {
   document.getElementById("semantic-similarity").textContent = result.semantic_similarity.toFixed(2);
   document.getElementById("concept-coverage").textContent = Math.round(result.concept_coverage * 100) + "%";
   document.getElementById("feedback-text").textContent = result.feedback;
-
+    const conceptsSummary = document.getElementById("concepts-summary");
+  const missingList = document.getElementById("missing-list");
+  missingList.innerHTML = "";
+  if (result.concepts_total) {
+    conceptsSummary.textContent =
+      result.concepts_covered + " of " + result.concepts_total + " key concepts covered.";
+  } else {
+    conceptsSummary.textContent = "";
+  }
+  (result.missing_concepts || []).forEach(function (concept) {
+    const item = document.createElement("li");
+    item.textContent = "Missing: " + concept;
+    missingList.appendChild(item);
+  });
   // Colour the overall score: green / orange / red
   const overall = document.getElementById("overall-score");
   overall.classList.remove("score-good", "score-medium", "score-low");
