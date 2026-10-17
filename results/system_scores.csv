@@ -1,0 +1,91 @@
+answer_id,question_id,topic,category,keyword_score,semantic_score
+1,Q01,Operating Systems,fully_correct,5.74,9.26
+2,Q01,Operating Systems,mostly_correct,7.24,9.81
+3,Q01,Operating Systems,partially_correct,3.85,9.29
+4,Q02,Operating Systems,correct_incomplete,4.27,7.82
+5,Q02,Operating Systems,relevant_incorrect,4.77,8.69
+6,Q02,Operating Systems,irrelevant,1.62,3.06
+7,Q03,Operating Systems,paraphrased_correct,3.6,8.25
+8,Q03,Operating Systems,hallucinated,6.11,8.13
+9,Q03,Operating Systems,very_short,2.29,4.47
+10,Q04,Operating Systems,overly_verbose,5.72,9.2
+11,Q04,Operating Systems,fully_correct,7.62,9.73
+12,Q04,Operating Systems,mostly_correct,7.37,9.79
+13,Q05,Operating Systems,partially_correct,3.16,7.45
+14,Q05,Operating Systems,correct_incomplete,3.0,7.33
+15,Q05,Operating Systems,relevant_incorrect,3.5,8.62
+16,Q06,Computer Networks,irrelevant,0.5,0.78
+17,Q06,Computer Networks,paraphrased_correct,3.13,8.12
+18,Q06,Computer Networks,hallucinated,5.64,8.89
+19,Q07,Computer Networks,very_short,1.82,4.44
+20,Q07,Computer Networks,overly_verbose,5.92,9.29
+21,Q07,Computer Networks,fully_correct,8.09,9.62
+22,Q08,Computer Networks,mostly_correct,6.19,8.3
+23,Q08,Computer Networks,partially_correct,4.19,7.43
+24,Q08,Computer Networks,correct_incomplete,4.22,6.72
+25,Q09,Computer Networks,relevant_incorrect,6.67,9.18
+26,Q09,Computer Networks,irrelevant,0.0,2.0
+27,Q09,Computer Networks,paraphrased_correct,6.0,7.63
+28,Q10,Computer Networks,hallucinated,6.17,8.85
+29,Q10,Computer Networks,very_short,2.22,5.69
+30,Q10,Computer Networks,overly_verbose,6.4,9.18
+31,Q11,DBMS,fully_correct,7.7,9.66
+32,Q11,DBMS,mostly_correct,8.29,9.07
+33,Q11,DBMS,partially_correct,4.57,8.48
+34,Q12,DBMS,correct_incomplete,4.17,8.59
+35,Q12,DBMS,relevant_incorrect,3.16,8.69
+36,Q12,DBMS,irrelevant,0.0,2.51
+37,Q13,DBMS,paraphrased_correct,4.8,8.35
+38,Q13,DBMS,hallucinated,7.62,9.5
+39,Q13,DBMS,very_short,4.55,7.26
+40,Q14,DBMS,overly_verbose,6.42,8.75
+41,Q14,DBMS,fully_correct,6.78,9.54
+42,Q14,DBMS,mostly_correct,6.82,8.88
+43,Q15,DBMS,partially_correct,4.12,8.33
+44,Q15,DBMS,correct_incomplete,4.52,8.37
+45,Q15,DBMS,relevant_incorrect,6.73,9.3
+46,Q16,Artificial Intelligence,irrelevant,1.58,2.2
+47,Q16,Artificial Intelligence,paraphrased_correct,3.67,7.24
+48,Q16,Artificial Intelligence,hallucinated,7.17,9.11
+49,Q17,Artificial Intelligence,very_short,4.0,7.98
+50,Q17,Artificial Intelligence,overly_verbose,4.8,7.77
+51,Q17,Artificial Intelligence,fully_correct,7.91,9.47
+52,Q18,Artificial Intelligence,mostly_correct,7.1,9.12
+53,Q18,Artificial Intelligence,partially_correct,2.42,8.68
+54,Q18,Artificial Intelligence,correct_incomplete,5.0,8.37
+55,Q19,Artificial Intelligence,relevant_incorrect,5.85,9.33
+56,Q19,Artificial Intelligence,irrelevant,0.0,1.36
+57,Q19,Artificial Intelligence,paraphrased_correct,3.75,9.09
+58,Q20,Artificial Intelligence,hallucinated,7.19,9.23
+59,Q20,Artificial Intelligence,very_short,1.74,5.25
+60,Q20,Artificial Intelligence,overly_verbose,4.47,8.69
+61,Q21,Programming,fully_correct,7.66,9.6
+62,Q21,Programming,mostly_correct,6.8,9.48
+63,Q21,Programming,partially_correct,3.2,8.35
+64,Q22,Programming,correct_incomplete,5.74,8.82
+65,Q22,Programming,relevant_incorrect,8.17,9.58
+66,Q22,Programming,irrelevant,0.95,3.24
+67,Q23,Programming,paraphrased_correct,5.0,8.36
+68,Q23,Programming,hallucinated,7.23,9.1
+69,Q23,Programming,very_short,4.38,5.91
+70,Q24,Programming,overly_verbose,5.59,8.27
+71,Q24,Programming,fully_correct,6.72,8.9
+72,Q24,Programming,mostly_correct,6.67,8.34
+73,Q25,Programming,partially_correct,4.43,8.86
+74,Q25,Programming,correct_incomplete,4.0,8.66
+75,Q25,Programming,relevant_incorrect,4.5,8.77
+76,Q26,Software Engineering,irrelevant,1.18,0.75
+77,Q26,Software Engineering,paraphrased_correct,2.37,7.69
+78,Q26,Software Engineering,hallucinated,7.39,9.48
+79,Q27,Software Engineering,very_short,1.94,6.02
+80,Q27,Software Engineering,overly_verbose,6.28,8.52
+81,Q27,Software Engineering,fully_correct,8.05,9.9
+82,Q28,Software Engineering,mostly_correct,8.29,9.63
+83,Q28,Software Engineering,partially_correct,2.5,7.04
+84,Q28,Software Engineering,correct_incomplete,4.14,7.36
+85,Q29,Software Engineering,relevant_incorrect,2.45,8.72
+86,Q29,Software Engineering,irrelevant,0.59,2.56
+87,Q29,Software Engineering,paraphrased_correct,4.57,8.87
+88,Q30,Software Engineering,hallucinated,6.79,9.3
+89,Q30,Software Engineering,very_short,5.0,7.84
+90,Q30,Software Engineering,overly_verbose,5.63,8.97
