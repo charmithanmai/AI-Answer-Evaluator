@@ -164,3 +164,21 @@ button:hover {
   margin: 0;
   line-height: 1.5;
 }
+/* ---------- Score colours ---------- */
+
+.score-good {
+  color: #1e8e3e;
+}
+
+.score-medium {
+  color: #e8710a;
+}
+
+.score-low {
+  color: #c0392b;
+}
+
+button:disabled {
+  background: #8a97ad;
+  cursor: not-allowed;
+}
