@@ -78,3 +78,89 @@ button:hover {
   margin: 12px 0 0 0;
   min-height: 1em;
 }
+
+/* ---------- Results dashboard ---------- */
+
+.hidden {
+  display: none;
+}
+
+#results {
+  background: white;
+  margin-top: 24px;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+#results h2 {
+  margin-top: 0;
+}
+
+.overall {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: #eaf0fa;
+  border-radius: 10px;
+}
+
+.overall-label {
+  font-size: 14px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.overall-value {
+  font-size: 48px;
+  font-weight: bold;
+  color: #2b4c7e;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background: #f4f6fa;
+  border-radius: 8px;
+  border: 1px solid #dde3ee;
+}
+
+.card-label {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.card-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.feedback {
+  margin-top: 20px;
+  padding: 16px;
+  background: #fffbea;
+  border-left: 4px solid #f0b429;
+  border-radius: 6px;
+}
+
+.feedback h3 {
+  margin: 0 0 8px 0;
+}
+
+.feedback p {
+  margin: 0;
+  line-height: 1.5;
+}

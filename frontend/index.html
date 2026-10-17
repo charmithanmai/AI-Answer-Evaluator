@@ -27,6 +27,43 @@
 
       <button type="submit" id="evaluate-btn">EVALUATE</button>
     </form>
+
+    <section id="results" class="hidden">
+      <h2>Evaluation Result</h2>
+
+      <div class="overall">
+        <span class="overall-label">Overall Score</span>
+        <span class="overall-value" id="overall-score">-</span>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <span class="card-label">Correctness</span>
+          <span class="card-value" id="correctness">-</span>
+        </div>
+        <div class="card">
+          <span class="card-label">Relevance</span>
+          <span class="card-value" id="relevance">-</span>
+        </div>
+        <div class="card">
+          <span class="card-label">Completeness</span>
+          <span class="card-value" id="completeness">-</span>
+        </div>
+        <div class="card">
+          <span class="card-label">Semantic Similarity</span>
+          <span class="card-value" id="semantic-similarity">-</span>
+        </div>
+        <div class="card">
+          <span class="card-label">Concept Coverage</span>
+          <span class="card-value" id="concept-coverage">-</span>
+        </div>
+      </div>
+
+      <div class="feedback">
+        <h3>Feedback</h3>
+        <p id="feedback-text"></p>
+      </div>
+    </section>
   </main>
 
   <script src="script.js"></script>
