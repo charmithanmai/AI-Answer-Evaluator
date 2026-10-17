@@ -11,9 +11,24 @@
     <h1>AI Answer Evaluator</h1>
     <p>How well does the AI-generated answer satisfy the expected answer?</p>
   </header>
+
   <main>
-    <p>Frontend skeleton is working.</p>
+    <form id="evaluate-form">
+      <label for="question">Question</label>
+      <textarea id="question" rows="2" placeholder="e.g. Explain deadlock in operating systems."></textarea>
+
+      <label for="reference_answer">Reference Answer</label>
+      <textarea id="reference_answer" rows="5" placeholder="Paste the teacher's reference answer here"></textarea>
+
+      <label for="ai_answer">AI Answer</label>
+      <textarea id="ai_answer" rows="5" placeholder="Paste the AI-generated answer here"></textarea>
+
+      <p id="error-message" class="error"></p>
+
+      <button type="submit" id="evaluate-btn">EVALUATE</button>
+    </form>
   </main>
+
   <script src="script.js"></script>
 </body>
 </html>

@@ -4,14 +4,77 @@ body {
   background: #f4f6fa;
   color: #222;
 }
+
 header {
   background: #2b4c7e;
   color: white;
   padding: 24px;
   text-align: center;
 }
+
+header h1 {
+  margin: 0 0 8px 0;
+}
+
+header p {
+  margin: 0;
+  opacity: 0.9;
+}
+
 main {
   max-width: 800px;
   margin: 24px auto;
   padding: 0 16px;
+}
+
+form {
+  background: white;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin: 16px 0 6px 0;
+}
+
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  border: 1px solid #c5ccd8;
+  border-radius: 6px;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #2b4c7e;
+}
+
+button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: #2b4c7e;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1f3a63;
+}
+
+.error {
+  color: #c0392b;
+  margin: 12px 0 0 0;
+  min-height: 1em;
 }
