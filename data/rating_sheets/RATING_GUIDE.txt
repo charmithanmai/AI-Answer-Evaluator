@@ -1,0 +1,22 @@
+HUMAN RATING GUIDE (everyone uses the same rules)
+
+Score each answer 0-10 on three criteria. Compare it with the reference answer.
+
+CORRECTNESS - are the statements in the answer true?
+  10 = everything stated is accurate      5 = mix of right and wrong
+   0 = the main claim is wrong
+  (A short answer can still be 10 here if what it says is right.)
+
+RELEVANCE - does it answer THIS question?
+  10 = directly on the question           5 = partly on topic / drifts
+   0 = about something else
+
+COMPLETENESS - does it cover the points in the reference?
+  10 = all reference points               5 = about half
+   0 = none of them
+  (Extra correct detail is fine. Count missing points, not length.)
+
+Rules:
+- Rate alone. Do not look at other people's sheets.
+- Do not change a score after seeing the system's output.
+- Whole numbers only. Leave a note in the 'notes' column if unsure.
