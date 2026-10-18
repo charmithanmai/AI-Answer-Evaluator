@@ -1,0 +1,4 @@
+id,question,reference_answer,ai_answer
+1,Explain deadlock in operating systems.,"Deadlock occurs when processes wait indefinitely for resources held by each other. It requires mutual exclusion, hold and wait, no preemption, and circular wait.","Deadlock occurs when two or more processes wait for resources held by one another, so none can proceed."
+2,What is a primary key?,"A primary key uniquely identifies each row in a table. It cannot contain NULL values. Each table can have only one primary key.","A primary key uniquely identifies each row of a table and cannot be NULL."
+3,What is a primary key?,"A primary key uniquely identifies each row in a table. It cannot contain NULL values. Each table can have only one primary key.","A primary key is a column that stores the largest value in a table."

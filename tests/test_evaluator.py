@@ -167,3 +167,16 @@ def test_feedback_handles_llm_failure():
 def test_feedback_handles_empty_inputs():
     assert build_feedback("", [], None) == ""
     assert build_feedback(None, None) == ""
+
+# --- edge cases ---
+
+def test_concept_coverage_with_empty_reference():
+    result = concept_coverage("", "Some answer.")
+    assert result["total"] == 0
+    assert result["coverage"] == 0.0
+
+
+def test_concept_coverage_with_empty_answer():
+    result = concept_coverage(REF, "")
+    assert result["covered"] == 0
+    assert result["total"] == 5
