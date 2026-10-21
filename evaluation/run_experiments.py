@@ -119,6 +119,7 @@ def main():
         _judge = core.llm_rubric_evaluate
 
         def _spy(*a, **k):  # remember the judge's raw message (M1's feedback hides errors)
+            k.setdefault("retries", 1)  # 1 try per call: retries on 503 also use up the daily quota
             res = _judge(*a, **k)
             LAST["judge_feedback"] = res["feedback"]
             return res
@@ -126,7 +127,7 @@ def main():
         if args.separate_llm_call:
             from baselines.llm_baseline import llm_score
 
-    rows, out_of_quota = [], False
+    rows, out_of_quota, overload_streak = [], False, 0
     for _, r in df.iterrows():
         row = dict(prev.get(r.answer_id, {}))
         row.update(answer_id=r.answer_id, question_id=r.question_id, topic=r.topic,
@@ -145,6 +146,7 @@ def main():
                     if not fb.startswith("LLM evaluation failed"):
                         res["missing_concepts"] = json.dumps(res["missing_concepts"])
                         row.update({k: res[k] for k in HYBRID_COLS})
+                        overload_streak = 0
                         break
                     row.update({k: None for k in HYBRID_COLS + ["llm_only_score"]})  # never keep fallback zeros
                     if _is_quota_error(fb) and ring.next():
@@ -155,6 +157,12 @@ def main():
                               "Progress is saved. Run the same command again tomorrow.")
                     else:
                         print(f"  A{r.answer_id}: Gemini failed ({fb[:80]}...) — left blank, re-run later")
+                        overload_streak += 1
+                        if overload_streak >= 2:
+                            out_of_quota = True  # stop calling Gemini for this run
+                            print("\nGemini keeps failing (503 = Google's servers are overloaded). "
+                                  "Stopping now so retries don't waste your daily quota.\n"
+                                  "Progress is saved. Try the same command again in an hour or two.")
                     break
 
             if not _blank(row.get("overall_score")):
