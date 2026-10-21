@@ -3,7 +3,7 @@ import traceback
 from fastapi import APIRouter, HTTPException
 
 from backend.schemas.evaluation import EvaluationRequest, EvaluationResponse
-
+from backend.database import save_evaluation
 router = APIRouter()
 
 # Keep True while testing the UI. On Day 6 this becomes False.
@@ -97,7 +97,15 @@ def evaluate(request: EvaluationRequest):
             raw = mock_evaluation(request.question, request.reference_answer, request.ai_answer)
         else:
             raw = real_evaluation(request.question, request.reference_answer, request.ai_answer)
-        return normalize_result(raw)
+        result = normalize_result(raw)
     except Exception as error:
         traceback.print_exc()  # full error appears in the server terminal
         raise HTTPException(status_code=500, detail="Evaluation failed: " + str(error))
+
+    # Saving to history must never break an evaluation
+    try:
+        save_evaluation(request.question, request.reference_answer, request.ai_answer, result)
+    except Exception:
+        traceback.print_exc()
+
+    return result

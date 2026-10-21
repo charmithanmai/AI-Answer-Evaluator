@@ -1,5 +1,5 @@
 const API_URL = "http://127.0.0.1:8000/evaluate";
-
+const HISTORY_URL = "http://127.0.0.1:8000/history";
 const form = document.getElementById("evaluate-form");
 const errorMessage = document.getElementById("error-message");
 const resultsSection = document.getElementById("results");
@@ -79,6 +79,7 @@ form.addEventListener("submit", async function (event) {
 
     const result = await response.json();
     showResults(result);
+    loadHistory();
   } catch (error) {
     console.error(error);
     errorMessage.textContent =
@@ -89,3 +90,73 @@ form.addEventListener("submit", async function (event) {
     evaluateButton.textContent = "EVALUATE";
   }
 });
+// ---------- History ----------
+
+function formatTime(isoString) {
+  const date = new Date(isoString);
+  return date.toLocaleString();
+}
+
+function addDetail(parent, label, value) {
+  const line = document.createElement("p");
+  const strong = document.createElement("strong");
+  strong.textContent = label + ": ";
+  line.appendChild(strong);
+  line.appendChild(document.createTextNode(value));
+  parent.appendChild(line);
+}
+
+async function loadHistory() {
+  const list = document.getElementById("history-list");
+  const emptyMessage = document.getElementById("history-empty");
+
+  try {
+    const response = await fetch(HISTORY_URL);
+    if (!response.ok) {
+      throw new Error("History could not be loaded.");
+    }
+    const items = await response.json();
+
+    list.innerHTML = "";
+    emptyMessage.classList.toggle("hidden", items.length > 0);
+
+    items.forEach(function (item) {
+      const details = document.createElement("details");
+      details.className = "history-item";
+
+      const summary = document.createElement("summary");
+      const shortQuestion =
+        item.question.length > 60 ? item.question.slice(0, 60) + "..." : item.question;
+      summary.textContent =
+        formatTime(item.created_at) + "  |  " + shortQuestion + "  |  " + item.overall_score + "/10";
+      details.appendChild(summary);
+
+      const body = document.createElement("div");
+      body.className = "history-body";
+      addDetail(body, "Question", item.question);
+      addDetail(body, "Reference Answer", item.reference_answer);
+      addDetail(body, "AI Answer", item.ai_answer);
+      addDetail(
+        body,
+        "Scores",
+        "Correctness " + item.correctness + "/10, Relevance " + item.relevance +
+          "/10, Completeness " + item.completeness + "/10, Semantic Similarity " +
+          Number(item.semantic_similarity).toFixed(2) + ", Concept Coverage " +
+          Math.round(item.concept_coverage * 100) + "%"
+      );
+      if (item.missing_concepts && item.missing_concepts.length > 0) {
+        addDetail(body, "Missing concepts", item.missing_concepts.join(", "));
+      }
+      addDetail(body, "Feedback", item.feedback);
+      details.appendChild(body);
+
+      list.appendChild(details);
+    });
+  } catch (error) {
+    console.error(error);
+    emptyMessage.textContent = "History could not be loaded. Is the backend running?";
+    emptyMessage.classList.remove("hidden");
+  }
+}
+
+loadHistory(); // show past evaluations when the page opens
