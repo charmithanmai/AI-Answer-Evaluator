@@ -7,7 +7,7 @@ from backend.schemas.evaluation import EvaluationRequest, EvaluationResponse
 router = APIRouter()
 
 # Keep True while testing the UI. On Day 6 this becomes False.
-USE_MOCK = True
+USE_MOCK = False
 
 EXPECTED_KEYS = [
     "correctness",
