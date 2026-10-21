@@ -1,0 +1,17 @@
+pair,criterion,n,MAE,Pearson,Weighted kappa,Within ±1 (%)
+A-C,correctness,30,0.933,0.899,0.877,76.667
+A-C,relevance,30,0.433,0.958,0.954,90.0
+A-C,completeness,30,0.6,0.943,0.935,90.0
+A-C,overall,30,0.66,0.941,0.939,76.667
+A-B,correctness,30,1.1,0.929,0.913,70.0
+A-B,relevance,30,1.033,0.829,0.814,83.333
+A-B,completeness,30,0.533,0.98,0.975,93.333
+A-B,overall,30,0.7,0.966,0.96,66.667
+B-C,correctness,30,0.7,0.921,0.918,86.667
+B-C,relevance,30,0.967,0.789,0.762,93.333
+B-C,completeness,30,0.7,0.952,0.951,83.333
+B-C,overall,30,0.687,0.945,0.942,76.667
+ALL,correctness,90,0.911,0.915,0.903,77.778
+ALL,relevance,90,0.811,0.854,0.852,88.889
+ALL,completeness,90,0.611,0.956,0.954,88.889
+ALL,overall,90,0.682,0.949,0.947,73.333

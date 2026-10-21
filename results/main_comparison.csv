@@ -1,0 +1,4 @@
+Method,n,MAE,RMSE,Pearson,Spearman,Within ±1 (%)
+Keyword,90,2.605,3.176,0.591,0.555,24.444
+Semantic,90,2.11,2.992,0.616,0.466,33.333
+Human vs human (ceiling),90,0.682,,0.949,,73.333

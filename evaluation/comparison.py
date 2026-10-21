@@ -64,6 +64,9 @@ def inter_rater(h):
     return pd.DataFrame(rows)
 
 
+MIN_N = 10  # a method needs at least this many scored answers to be reported
+
+
 def main():
     h, s = load()
     ir = inter_rater(h)
@@ -72,59 +75,76 @@ def main():
     hm = h.groupby("answer_id")[["correctness", "relevance", "completeness", "overall"]].mean()
     hm = hm.add_prefix("human_").reset_index()
     df = s.merge(hm, on="answer_id")
-    complete = df.dropna(subset=list(METHODS.values()))
-    if len(complete) < len(df):
-        print(f"WARNING: {len(df) - len(complete)} answers lack some system scores; "
-              "re-run run_experiments. Using the complete ones only.")
-    df = complete
+    for c in list(METHODS.values()) + COMPONENTS:
+        if c not in df:
+            df[c] = np.nan
     df.to_csv(f"{R}/merged.csv", index=False)
-    y = df.human_overall
+
+    # each method is evaluated on the answers it actually scored
+    counts = {m: int(df[c].notna().sum()) for m, c in METHODS.items()}
+    avail = {m: c for m, c in METHODS.items() if counts[m] >= MIN_N}
+    missing = [f"{m} ({counts[m]}/{len(df)})" for m in METHODS if m not in avail]
+    if missing:
+        print("NOTE: not enough scores yet for: " + ", ".join(missing)
+              + ". They are left out; re-run run_experiments, then this script again.")
 
     # ---- 1. main table
-    main_tab = pd.DataFrame({m: all_metrics(y, df[c]) for m, c in METHODS.items()}).T
-    human_ceiling = ir[(ir.pair == "ALL") & (ir.criterion == "overall")].iloc[0]
-    main_tab.loc["Human vs human (ceiling)"] = [human_ceiling["MAE"], np.nan,
-                                                human_ceiling["Pearson"], np.nan,
-                                                human_ceiling["Within ±1 (%)"]]
+    rows = {}
+    for m, c in avail.items():
+        d = df.dropna(subset=[c])
+        rows[m] = {"n": len(d), **all_metrics(d.human_overall, d[c])}
+    main_tab = pd.DataFrame(rows).T
+    hc = ir[(ir.pair == "ALL") & (ir.criterion == "overall")].iloc[0]
+    main_tab.loc["Human vs human (ceiling)"] = {"n": hc["n"], "MAE": hc["MAE"], "RMSE": np.nan,
+                                                "Pearson": hc["Pearson"], "Spearman": np.nan,
+                                                "Within ±1 (%)": hc["Within ±1 (%)"]}
+    main_tab["n"] = main_tab["n"].astype(int)
     main_tab.index.name = "Method"
     main_tab.round(3).to_csv(f"{R}/main_comparison.csv")
 
     # ---- 2. per category
-    cat = pd.DataFrame({m: df.groupby("category").apply(lambda g, c=c: mae(g.human_overall, g[c]))
-                        for m, c in METHODS.items()})
+    cat = pd.DataFrame({m: df.dropna(subset=[c]).groupby("category")
+                        .apply(lambda g, c=c: mae(g.human_overall, g[c]))
+                        for m, c in avail.items()})
     cat["n"] = df.groupby("category").size()
     cat.round(2).to_csv(f"{R}/per_category_mae.csv")
 
-    # mean score per category (does each method rank the categories sensibly?)
-    means = df.groupby("category")[["human_overall"] + list(METHODS.values())].mean()
-    means.columns = ["Human"] + list(METHODS)
-    means.sort_values("Human", ascending=False).round(2).to_csv(f"{R}/per_category_mean_score.csv")
+    means = df.groupby("category")[["human_overall"] + list(avail.values())].mean()
+    means.columns = ["Human"] + list(avail)
+    means = means.sort_values("Human", ascending=False)
+    means.round(2).to_csv(f"{R}/per_category_mean_score.csv")
 
-    # ---- 3. hybrid per-criterion vs human per-criterion
-    crit = pd.DataFrame({c: all_metrics(df[f"human_{c}"], df[c])
-                         for c in ["correctness", "relevance", "completeness"]}).T
-    crit.loc["completeness ~ concept_coverage x10"] = all_metrics(df.human_completeness,
-                                                                df.concept_coverage * 10)
-    crit.round(3).to_csv(f"{R}/criterion_agreement.csv")
-
-    # ---- 4. weight tuning (cross-validated by question, so it's not cheating)
-    wt = tune_weights(df)
-    wt.to_csv(f"{R}/weight_tuning.csv", index=False)
+    # ---- 3 + 4. hybrid-only analyses (need Gemini scores)
+    crit = wt = None
+    hyb = df.dropna(subset=COMPONENTS + ["overall_score"])
+    if len(hyb) >= MIN_N:
+        crit = pd.DataFrame({c: all_metrics(hyb[f"human_{c}"], hyb[c])
+                             for c in ["correctness", "relevance", "completeness"]}).T
+        crit.loc["completeness ~ concept_coverage x10"] = all_metrics(hyb.human_completeness,
+                                                                    hyb.concept_coverage * 10)
+        crit.round(3).to_csv(f"{R}/criterion_agreement.csv")
+        if hyb.topic.nunique() >= 2:
+            wt = tune_weights(hyb)
+            wt.to_csv(f"{R}/weight_tuning.csv", index=False)
 
     # ---- 5. graphs
-    plots(df, main_tab, cat)
+    plots(df, main_tab, cat, avail)
 
-    pd.set_option("display.width", 140)
+    pd.set_option("display.width", 160)
     print("\n=== INTER-RATER AGREEMENT (overall) ===")
     print(ir[ir.criterion == "overall"].round(3).to_string(index=False))
     print("\n=== MAIN COMPARISON vs HUMAN OVERALL ===")
     print(main_tab.round(3).to_string())
     print("\n=== MAE PER ANSWER CATEGORY ===")
     print(cat.round(2).to_string())
-    print("\n=== HYBRID CRITERIA vs HUMAN CRITERIA ===")
-    print(crit.round(3).to_string())
-    print("\n=== WEIGHT TUNING ===")
-    print(wt.to_string(index=False))
+    print("\n=== MEAN SCORE PER CATEGORY (does each method rank answer types like humans?) ===")
+    print(means.round(2).to_string())
+    if crit is not None:
+        print("\n=== HYBRID CRITERIA vs HUMAN CRITERIA ===")
+        print(crit.round(3).to_string())
+    if wt is not None:
+        print("\n=== WEIGHT TUNING ===")
+        print(wt.to_string(index=False))
     print(f"\nAll tables and figures saved in {R}/")
 
 
@@ -167,8 +187,8 @@ def tune_weights(df):
     return pd.DataFrame(rows)
 
 
-def plots(df, main_tab, cat):
-    names = list(METHODS)
+def plots(df, main_tab, cat, avail):
+    names = list(avail)
     cols = [COLORS[n] for n in names]
 
     fig, ax = plt.subplots(1, 2, figsize=(11, 4))
@@ -186,8 +206,9 @@ def plots(df, main_tab, cat):
         a.spines[["top", "right"]].set_visible(False)
     fig.tight_layout(); fig.savefig(f"{R}/fig_main_comparison.png", dpi=200); plt.close(fig)
 
-    fig, axes = plt.subplots(1, 4, figsize=(15, 3.8), sharey=True)
-    for a, (n, c) in zip(axes, METHODS.items()):
+    fig, axes = plt.subplots(1, len(avail), figsize=(3.8 * len(avail), 3.8), sharey=True)
+    axes = np.atleast_1d(axes)
+    for a, (n, c) in zip(axes, avail.items()):
         a.scatter(df.human_overall, df[c], s=18, color=COLORS[n], alpha=0.75)
         a.plot([0, 10], [0, 10], "--", color="#888", lw=1)
         a.set_xlim(0, 10.3); a.set_ylim(0, 10.3); a.set_title(n)
@@ -196,11 +217,12 @@ def plots(df, main_tab, cat):
     axes[0].set_ylabel("System score")
     fig.tight_layout(); fig.savefig(f"{R}/fig_scatter_vs_human.png", dpi=200); plt.close(fig)
 
-    c2 = cat[names].sort_values("Hybrid (ours)")
+    c2 = cat[names].sort_values(names[-1])
     fig, ax = plt.subplots(figsize=(10, 4.5))
     yy = np.arange(len(c2))
     for i, n in enumerate(names):
-        ax.barh(yy + (i - 1.5) * 0.2, c2[n], 0.2, label=n, color=COLORS[n])
+        w = 0.8 / len(names)
+        ax.barh(yy + (i - (len(names) - 1) / 2) * w, c2[n], w, label=n, color=COLORS[n])
     ax.set_yticks(yy); ax.set_yticklabels(c2.index); ax.set_xlabel("MAE vs human")
     ax.set_title("Error by answer category"); ax.legend(loc="lower right")
     ax.spines[["top", "right"]].set_visible(False)

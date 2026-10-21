@@ -1,0 +1,11 @@
+category,Keyword,Semantic,n
+correct_incomplete,1.73,2.14,9
+fully_correct,2.64,0.48,9
+hallucinated,0.96,1.93,9
+irrelevant,0.72,2.04,9
+mostly_correct,1.29,1.04,9
+overly_verbose,4.13,1.08,9
+paraphrased_correct,5.77,1.69,9
+partially_correct,2.26,2.35,9
+relevant_incorrect,3.8,7.7,9
+very_short,2.75,0.66,9
