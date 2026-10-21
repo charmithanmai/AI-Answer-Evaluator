@@ -82,3 +82,9 @@ def get_history(limit: int = 50) -> list:
         item["missing_concepts"] = json.loads(item["missing_concepts"] or "[]")
         history.append(item)
     return history
+
+
+def clear_history() -> int:
+    with get_connection() as connection:
+        cursor = connection.execute("DELETE FROM evaluations")
+        return cursor.rowcount
